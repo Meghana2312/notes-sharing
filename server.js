@@ -1,10 +1,16 @@
 const express = require("express");
 const path = require("path");
 const multer = require("multer");
+const fs = require("fs");
 
 const app = express();
 
-// storage
+// Ensure uploads folder exists
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
+// Multer storage config
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -16,10 +22,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// static uploads
+// Serve uploaded files
 app.use("/uploads", express.static("uploads"));
 
-// routes
+// Routes
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views/index.html"));
 });
@@ -32,12 +38,14 @@ app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "views/notes.html"));
 });
 
+// File upload route
 app.post("/upload", upload.single("note"), (req, res) => {
   res.send("File Uploaded Successfully");
 });
 
-// server start
-const PORT = 3000;
+// IMPORTANT: Use dynamic port for Railway
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log("Server started on port 3000");
+  console.log(`Server started on port ${PORT}`);
 });
