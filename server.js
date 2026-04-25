@@ -10,7 +10,7 @@ if (!fs.existsSync("uploads")) {
   fs.mkdirSync("uploads");
 }
 
-// Multer setup
+// Multer storage setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -22,20 +22,42 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Serve uploads
+// Serve uploaded files
 app.use("/uploads", express.static("uploads"));
 
-//  TEST ROUTE (IMPORTANT)
+// =======================
+// ROUTES
+// =======================
+
+//  Root route (for Railway check)
 app.get("/", (req, res) => {
-  res.send("Server is running 🚀");
+  res.status(200).send("OK");
 });
 
-// Upload route
+// Health route (for Railway)
+app.get("/health", (req, res) => {
+  res.status(200).send("healthy");
+});
+
+//  Upload page (optional if you have HTML)
+app.get("/upload", (req, res) => {
+  res.sendFile(path.join(__dirname, "views/upload.html"));
+});
+
+// Notes page (optional)
+app.get("/notes", (req, res) => {
+  res.sendFile(path.join(__dirname, "views/notes.html"));
+});
+
+// File upload
 app.post("/upload", upload.single("note"), (req, res) => {
   res.send("File Uploaded Successfully");
 });
 
-// Start server
+// =======================
+// SERVER START
+// =======================
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
