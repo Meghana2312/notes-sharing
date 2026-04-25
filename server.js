@@ -1,9 +1,12 @@
 const express = require("express");
+const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
-const path = require("path");
 
 const app = express();
+
+// Serve static files
+app.use(express.static("views"));
 
 // Ensure uploads folder exists
 if (!fs.existsSync("uploads")) {
@@ -25,33 +28,17 @@ const upload = multer({ storage });
 // Serve uploads
 app.use("/uploads", express.static("uploads"));
 
-// Routes
+// HOME PAGE (IMPORTANT FIX)
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views/index.html"));
 });
 
-app.get("/upload", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/upload.html"));
-});
-
-app.get("/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/notes.html"));
-});
-
-// API to list files
-app.get("/files", (req, res) => {
-  fs.readdir("uploads", (err, files) => {
-    if (err) return res.send([]);
-    res.json(files);
-  });
-});
-
 // Upload route
 app.post("/upload", upload.single("note"), (req, res) => {
-  res.send("File Uploaded Successfully <br><a href='/'>Go Home</a>");
+  res.send("File Uploaded Successfully");
 });
 
-// Health check
+// Health route (for Render)
 app.get("/health", (req, res) => {
   res.send("OK");
 });
@@ -60,5 +47,5 @@ app.get("/health", (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server started on port ${PORT}`);
 });
