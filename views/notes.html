@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Notes</title>
+  <title>All Notes</title>
 </head>
 <body>
+  <h2>Uploaded Notes</h2>
 
-<h1>Uploaded Notes</h1>
+  <div id="files"></div>
 
-<p>Your uploaded files will appear in uploads folder.</p>
+  <script>
+    fetch('/files')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('files');
+        data.forEach(file => {
+          const link = document.createElement('a');
+          link.href = '/uploads/' + file;
+          link.innerText = file;
+          link.target = "_blank";
 
-<a href="/">Back Home</a>
+          container.appendChild(link);
+          container.appendChild(document.createElement('br'));
+        });
+      });
+  </script>
 
+  <br>
+  <a href="/">Back to Home</a>
 </body>
 </html>

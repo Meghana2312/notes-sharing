@@ -1,7 +1,7 @@
 const express = require("express");
-const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
@@ -10,7 +10,7 @@ if (!fs.existsSync("uploads")) {
   fs.mkdirSync("uploads");
 }
 
-// Multer storage setup
+// Multer setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -22,44 +22,43 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Serve uploaded files
+// Serve uploads
 app.use("/uploads", express.static("uploads"));
 
-// =======================
-// ROUTES
-// =======================
-
-//  Root route (for Railway check)
+// Routes
 app.get("/", (req, res) => {
-  res.status(200).send("OK");
+  res.sendFile(path.join(__dirname, "views/index.html"));
 });
 
-// Health route (for Railway)
-app.get("/health", (req, res) => {
-  res.status(200).send("healthy");
-});
-
-//  Upload page (optional if you have HTML)
 app.get("/upload", (req, res) => {
   res.sendFile(path.join(__dirname, "views/upload.html"));
 });
 
-// Notes page (optional)
 app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "views/notes.html"));
 });
 
-// File upload
-app.post("/upload", upload.single("note"), (req, res) => {
-  res.send("File Uploaded Successfully");
+// API to list files
+app.get("/files", (req, res) => {
+  fs.readdir("uploads", (err, files) => {
+    if (err) return res.send([]);
+    res.json(files);
+  });
 });
 
-// =======================
-// SERVER START
-// =======================
+// Upload route
+app.post("/upload", upload.single("note"), (req, res) => {
+  res.send("File Uploaded Successfully <br><a href='/'>Go Home</a>");
+});
 
+// Health check
+app.get("/health", (req, res) => {
+  res.send("OK");
+});
+
+// Start server
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
