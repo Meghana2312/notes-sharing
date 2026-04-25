@@ -22,10 +22,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Serve uploaded files
+// Serve static files
 app.use("/uploads", express.static("uploads"));
+app.use(express.static(path.join(__dirname, "views"))); // serve HTML files
 
 // Routes
+
+// Root route (IMPORTANT for Railway)
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views/index.html"));
 });
@@ -38,12 +41,12 @@ app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "views/notes.html"));
 });
 
-// File upload route
+// Upload route
 app.post("/upload", upload.single("note"), (req, res) => {
   res.send("File Uploaded Successfully");
 });
 
-// IMPORTANT: Use dynamic port for Railway
+// Use Railway PORT
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
