@@ -13,6 +13,11 @@
       .then(res => res.json())
       .then(data => {
         const container = document.getElementById('files');
+
+        if (data.length === 0) {
+          container.innerText = "No files uploaded yet";
+        }
+
         data.forEach(file => {
           const link = document.createElement('a');
           link.href = '/uploads/' + file;
@@ -26,6 +31,6 @@
   </script>
 
   <br>
-  <a href="/">Back to Home</a>
+  <a href="/">Go Home</a>
 </body>
 </html>

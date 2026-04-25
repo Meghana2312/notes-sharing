@@ -5,7 +5,7 @@ const fs = require("fs");
 
 const app = express();
 
-// Serve static files (HTML, CSS, JS)
+// Serve static HTML files
 app.use(express.static("views"));
 
 // Ensure uploads folder exists
@@ -13,7 +13,7 @@ if (!fs.existsSync("uploads")) {
   fs.mkdirSync("uploads");
 }
 
-// Multer setup for file uploads
+// Multer setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -46,12 +46,20 @@ app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "views/notes.html"));
 });
 
+// API: get list of uploaded files
+app.get("/files", (req, res) => {
+  fs.readdir("uploads", (err, files) => {
+    if (err) return res.json([]);
+    res.json(files);
+  });
+});
+
 // Upload API
 app.post("/upload", upload.single("note"), (req, res) => {
   res.send("File Uploaded Successfully ✅ <br><a href='/'>Go Home</a>");
 });
 
-// Health check (important for Render)
+// Health check (for Render)
 app.get("/health", (req, res) => {
   res.send("OK");
 });
