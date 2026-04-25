@@ -1,11 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Notes Sharing</title>
+  <meta charset="UTF-8">
+  <title>Notes Sharing App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      margin-top: 100px;
+    }
+
+    h1 {
+      font-size: 40px;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 15px;
+      padding: 12px 25px;
+      font-size: 18px;
+      color: white;
+      background-color: #333;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #555;
+    }
+
+    .about {
+      margin-top: 40px;
+      font-size: 16px;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to Notes Sharing App 🚀</h1>
-  <a href="/upload">Upload Notes</a><br><br>
-  <a href="/notes">View Notes</a>
+
+  <div class="container">
+    <h1>📚 Notes Sharing App 🚀</h1>
+
+    <a href="/upload" class="btn">Upload Notes</a>
+    <a href="/notes" class="btn">View Notes</a>
+    <a href="/about" class="btn">About Project</a>
+
+    <div class="about">
+      <h3>About</h3>
+      <p>This is a cloud-based notes sharing application.</p>
+      <p>Users can upload and access notes from anywhere.</p>
+      <p>Deployed on cloud using Render.</p>
+    </div>
+  </div>
+
 </body>
 </html>
